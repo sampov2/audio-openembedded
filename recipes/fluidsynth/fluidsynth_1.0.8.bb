@@ -2,11 +2,13 @@ DESCRIPTION = "Fluidsynth is a software synthesizer"
 HOMEPAGE = "http://www.fluidsynth.org/"
 SECTION = "libs/multimedia"
 LICENSE = "GPLv2"
-PR = "r1"
+PR = "r4"
 
-DEPENDS = "alsa-lib ncurses"
+DEPENDS = "alsa-lib ncurses jack"
 
-SRC_URI = "http://savannah.nongnu.org/download/fluid/${P}.tar.gz"
+SRC_URI = "http://savannah.nongnu.org/download/fluid/${P}.tar.gz \
+           file://usr_lib_libtool.patch \
+   "
 
 inherit autotools pkgconfig lib_package
 

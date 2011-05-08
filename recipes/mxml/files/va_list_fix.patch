@@ -1,0 +1,123 @@
+--- mxml-2.6a/Makefile.in	2008-12-06 06:20:38.000000000 +0200
++++ mxml-2.6b/Makefile.in	2011-05-01 22:51:26.000000000 +0300
+@@ -52,7 +52,7 @@
+ libdir		=	@libdir@
+ mandir		=	@mandir@
+ docdir		=	@docdir@
+-BUILDROOT	=	$(DSTROOT)
++BUILDROOT	=	$(DESTDIR)$(DSTROOT)
+ 
+ 
+ #
+@@ -88,7 +88,7 @@
+ 			mxml-node.o mxml-search.o mxml-set.o
+ LIBOBJS		=	$(PUBLIBOBJS) mxml-private.o mxml-string.o
+ OBJS		=	mxmldoc.o testmxml.o $(LIBOBJS)
+-TARGETS		=	$(LIBMXML) mxmldoc testmxml mxml.xml doc/mxml.man
++TARGETS		=	$(LIBMXML) 
+ 
+ 
+ #
+@@ -135,7 +135,6 @@
+ 
+ install:	$(TARGETS) install-$(LIBMXML) install-libmxml.a
+ 	$(INSTALL_DIR) $(BUILDROOT)$(bindir)
+-	$(INSTALL_BIN) mxmldoc $(BUILDROOT)$(bindir) 
+ 	$(INSTALL_DIR) $(BUILDROOT)$(docdir)
+ 	for file in $(DOCFILES); do \
+ 		$(INSTALL_MAN) $$file $(BUILDROOT)$(docdir); \
+@@ -144,10 +143,6 @@
+ 	$(INSTALL_DATA) mxml.h $(BUILDROOT)$(includedir)
+ 	$(INSTALL_DIR) $(BUILDROOT)$(libdir)/pkgconfig
+ 	$(INSTALL_DATA) mxml.pc $(BUILDROOT)$(libdir)/pkgconfig
+-	$(INSTALL_DIR) $(BUILDROOT)$(mandir)/man1
+-	$(INSTALL_MAN) doc/mxmldoc.man $(BUILDROOT)$(mandir)/man1/mxmldoc.1
+-	$(INSTALL_DIR) $(BUILDROOT)$(mandir)/man3
+-	$(INSTALL_MAN) doc/mxml.man $(BUILDROOT)$(mandir)/man3/mxml.3
+ 
+ install-libmxml.a:
+ 	$(INSTALL_DIR) $(BUILDROOT)$(libdir)
+--- mxml-2.6a/mxmldoc.c	2009-05-05 16:38:00.000000000 +0300
++++ mxml-2.6b/mxmldoc.c	2011-05-01 22:42:09.000000000 +0300
+@@ -61,7 +61,7 @@
+ #  include <sys/wait.h>
+ extern char **environ;
+ #endif /* !WIN32 */
+-
++#define MXML_VERSION "Mini-XML v2.6"
+ 
+ /*
+  * This program scans source and header files and produces public API
+--- mxml-2.6a/mxml-private.c	2007-11-22 20:01:52.000000000 +0200
++++ mxml-2.6b/mxml-private.c	2011-05-01 22:33:52.000000000 +0300
+@@ -28,6 +28,10 @@
+  * Include necessary headers...
+  */
+ 
++#include <stdio.h>
++#include <stddef.h>
++#include <stdarg.h>
++
+ #include "mxml-private.h"
+ 
+ 
+--- mxml-2.6a/mxml-node.c	2008-10-26 20:28:05.000000000 +0200
++++ mxml-2.6b/mxml-node.c	2011-05-01 22:24:00.000000000 +0300
+@@ -38,10 +38,11 @@
+  * Include necessary headers...
+  */
+ 
++#include <stdarg.h>
++
+ #include "config.h"
+ #include "mxml.h"
+ 
+-
+ /*
+  * Local functions...
+  */
+--- mxml-2.6a/mxml-attr.c	2007-09-15 23:04:56.000000000 +0300
++++ mxml-2.6b/mxml-attr.c	2011-05-01 22:24:03.000000000 +0300
+@@ -28,10 +28,11 @@
+  * Include necessary headers...
+  */
+ 
++#include <stdarg.h>
++
+ #include "config.h"
+ #include "mxml.h"
+ 
+-
+ /*
+  * Local functions...
+  */
+--- mxml-2.6a/mxml-set.c	2007-04-24 00:48:03.000000000 +0300
++++ mxml-2.6b/mxml-set.c	2011-05-01 22:27:17.000000000 +0300
+@@ -31,6 +31,8 @@
+  * Include necessary headers...
+  */
+ 
++#include <stdarg.h>
++
+ #include "config.h"
+ #include "mxml.h"
+ 
+--- mxml-2.6a/mxml-string.c	2009-04-18 20:05:52.000000000 +0300
++++ mxml-2.6b/mxml-string.c	2011-05-01 22:39:04.000000000 +0300
+@@ -28,8 +28,16 @@
+  * Include necessary headers...
+  */
+ 
++#include <stdio.h>
++#include <stddef.h>
++#include <stdarg.h>
++
+ #include "config.h"
+ 
++char *					/* O - New string pointer */
++_mxml_vstrdupf(const char *format,	/* I - Printf-style format string */
++               va_list    ap)		/* I - Pointer to additional arguments */
++;
+ 
+ #ifndef HAVE_SNPRINTF
+ /*

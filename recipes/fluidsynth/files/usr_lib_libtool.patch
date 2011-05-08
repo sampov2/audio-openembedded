@@ -1,0 +1,21 @@
+--- b/fluidsynth.pc.in	2011-05-04 10:19:06.000000000 +0300
++++ a/fluidsynth.pc.in	2011-05-04 10:19:21.000000000 +0300
+@@ -6,5 +6,5 @@
+ Name: FluidSynth
+ Description: Software SoundFont synth
+ Version: @VERSION@
+-Libs: -L${libdir} -lfluidsynth
++Libs: -lfluidsynth
+ Cflags: -I${includedir}
+--- b/ltmain.sh	2011-05-04 10:19:06.000000000 +0300
++++ a/ltmain.sh	2011-05-04 14:09:48.000000000 +0300
+@@ -6507,6 +6507,9 @@
+ 	    if test "$build_libtool_need_lc" = "yes"; then
+ 	      deplibs="$deplibs -lc"
+ 	    fi
++            # Remove -L/usr/lib from deplibs: HACK
++            deplibs=$(echo $deplibs | sed 's=-L/usr/lib ==')
++
+ 	    ;;
+ 	  esac
+ 	fi
